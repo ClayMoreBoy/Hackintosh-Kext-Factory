@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Hackintosh CI
 
 on:
   push:
@@ -7,16 +7,87 @@ on:
     branches: [ master ]
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    working_directory: ~/Hackintosh
+    environment:
+      BUILD_DIR: $GITHUB_WORKSPACE
+      SRC_DIR: $BUILD_DIR/Sources
+      RELEASE_DIR: $BUILD_DIR/Release
+    runs-on: macos-10.15
 
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - uses: actions/checkout@v2.2.0
+      # Prepare for release and src results
+      - name: Prepare Make Dir
+        run: |
+          mkdir -p $SRC_DIR $RELEASE_DIR
+          xcodebuild -version
+      - name: Clone Code
+        run: |
+          cd $SRC_DIR
+          git clone --depth=1 https://github.com/acidanthera/Lilu
+          git clone --depth=1 https://github.com/acidanthera/VirtualSMC
+          git clone --depth=1 https://github.com/acidanthera/AirportBrcmFixup
+          git clone --depth=1 https://github.com/acidanthera/AppleALC
+          git clone --depth=1 https://github.com/acidanthera/WhateverGreen
+          git clone --depth=1 https://github.com/acidanthera/IOJones
+          git clone --depth=1 https://github.com/Mieze/IntelMausiEthernet
+          git clone --depth=1 https://github.com/Mieze/RTL8111_driver_for_OS_X
+          git clone --depth=1 https://github.com/Mieze/AtherosE2200Ethernet
+          git clone --depth=1 https://github.com/Mieze/RealtekRTL8100
+          git clone --depth=1 https://github.com/osy86/ThunderboltReset
+          git clone --depth=1 https://github.com/acidanthera/DebugEnhancer
+          git clone --depth=1 https://github.com/Mieze/LucyRTL8125Ethernet
+          git clone --depth=1 https://github.com/acidanthera/OpenCorePkg
+          git clone --depth=1 https://github.com/acidanthera/VoodooInput
+          git clone --depth=1 https://github.com/acidanthera/VoodooPS2
+      - name: Copy Lilu VoodooInput  Debug File
+          run: |
+            mkdir -p $RELEASE_DIR/tmp
+            xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
+            xcodebuild -project ./VoodooInput/VoodooInput.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
+            # copy lib
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./WhateverGreen
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./AppleALC
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./AirportBrcmFixup
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./VirtualSMC
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./ThunderboltReset
+            cp -r $RELEASE_DIR/tmp/Lilu.kext ./DebugEnhancer
+            cp -r $RELEASE_DIR/tmp/VoodooInput.kext ./VoodooPS2
+            # clear
+            rm -rf $RELEASE_DIR
+            mkdir -p $RELEASE_DIR
+      - name: Build kext
+          run: |
+            cd $SRC_DIR
+            for m in $(ls | grep -v "OpenCorePkg");do cd $SRC_DIR/$m/;xcodebuild CONFIGURATION_BUILD_DIR=$RELEASE_DIR;done;
+      - name: Package Release
+          run: |
+            cd $BUILD_DIR
+            zip -q -r Release.zip $RELEASE_DIR
+      - name: Get current time
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: Hackintosh-${{ steps.date.outputs.date }}
+          release_name: Hackintosh-${{ steps.date.outputs.date }}
+          body: |
+            Hackintosh
+            - Build-in Pickle formatter now recognizes numpy.array, pandas.DataFrame and pandas.Series
+            - Value now can be saved as file
+          draft: false
+          prerelease: false
+      - name: upload a release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Release.zip
+          asset_name: ${{ steps.date.outputs.date }}-Release.zip
+          asset_content_type: application/zip
+      
