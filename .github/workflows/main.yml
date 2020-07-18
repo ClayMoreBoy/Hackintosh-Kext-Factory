@@ -7,13 +7,11 @@ on:
     branches: [ master ]
 jobs:
   build:
-    working_directory: ~/Hackintosh
-    environment:
+    env:
       BUILD_DIR: $GITHUB_WORKSPACE
       SRC_DIR: $BUILD_DIR/Sources
       RELEASE_DIR: $BUILD_DIR/Release
     runs-on: macos-10.15
-
     steps:
       - uses: actions/checkout@v2.2.0
       # Prepare for release and src results
@@ -41,29 +39,55 @@ jobs:
           git clone --depth=1 https://github.com/acidanthera/VoodooInput
           git clone --depth=1 https://github.com/acidanthera/VoodooPS2
       - name: Copy Lilu VoodooInput  Debug File
-          run: |
-            mkdir -p $RELEASE_DIR/tmp
-            xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
-            xcodebuild -project ./VoodooInput/VoodooInput.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
-            # copy lib
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./WhateverGreen
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./AppleALC
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./AirportBrcmFixup
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./VirtualSMC
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./ThunderboltReset
-            cp -r $RELEASE_DIR/tmp/Lilu.kext ./DebugEnhancer
-            cp -r $RELEASE_DIR/tmp/VoodooInput.kext ./VoodooPS2
-            # clear
-            rm -rf $RELEASE_DIR
-            mkdir -p $RELEASE_DIR
-      - name: Build kext
-          run: |
-            cd $SRC_DIR
-            for m in $(ls | grep -v "OpenCorePkg");do cd $SRC_DIR/$m/;xcodebuild CONFIGURATION_BUILD_DIR=$RELEASE_DIR;done;
+        run: |
+          mkdir -p $RELEASE_DIR/tmp
+          xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
+          xcodebuild -project ./VoodooInput/VoodooInput.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
+          # copy lib
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./WhateverGreen
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./AppleALC
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./AirportBrcmFixup
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./VirtualSMC
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./ThunderboltReset
+          cp -r $RELEASE_DIR/tmp/Lilu.kext ./DebugEnhancer
+          cp -r $RELEASE_DIR/tmp/VoodooInput.kext ./VoodooPS2
+          # clear
+          rm -rf $RELEASE_DIR
+          mkdir -p $RELEASE_DIR
+      - name: Build Kext
+        id: Kext
+        run: |
+          cd $SRC_DIR/AirportBrcmFixup/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/WhateverGreen/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/AppleALC/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/VirtualSMC/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/IOJones/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/IntelMausiEthernet/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/RTL8111_driver_for_OS_X/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/AtherosE2200Ethernet/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/RealtekRTL8100/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/ThunderboltReset/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/DebugEnhancer/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/VoodooInput/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/VoodooPS2/
+          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
+          cd $SRC_DIR/OpenCorePkg
       - name: Package Release
-          run: |
-            cd $BUILD_DIR
-            zip -q -r Release.zip $RELEASE_DIR
+        run: |
+          cd $BUILD_DIR
+          zip -q -r Release.zip $RELEASE_DIR
       - name: Get current time
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
@@ -90,4 +114,3 @@ jobs:
           asset_path: Release.zip
           asset_name: ${{ steps.date.outputs.date }}-Release.zip
           asset_content_type: application/zip
-      
