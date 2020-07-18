@@ -82,18 +82,22 @@ jobs:
           cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       - name: Package Release
         run: |
+          cd $GITHUB_WORKSPACE
           zip -q -r Release.zip $GITHUB_WORKSPACE/Release
-      - name: Get current time
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.0
+        with:
+          timeZone: 8
+          format: 'YYYY-MM-DD-HH-mm-ss'
       - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: Hackintosh-${{ steps.date.outputs.date }}
-          release_name: Hackintosh-${{ steps.date.outputs.date }}
+          tag_name: "Hackintosh-${{ steps.time.outputs.time }}"
+          release_name: "Hackintosh-${{ steps.time.outputs.time }}"
           body: |
             Hackintosh
             - Build-in Pickle formatter now recognizes numpy.array, pandas.DataFrame and pandas.Series
@@ -106,6 +110,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Release.zip
-          asset_name: ${{ steps.date.outputs.date }}-Release.zip
+          asset_path: $GITHUB_WORKSPACE/Release.zip
+          asset_name: "${{ steps.time.outputs.time }}-Release.zip"
           asset_content_type: application/zip
