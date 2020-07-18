@@ -84,10 +84,10 @@ jobs:
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       #     sh build_oc.tool
       #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
-      # - name: Package Release
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     zip -q -r Release.zip $GITHUB_WORKSPACE/Release/*
+      - name: Package Release
+        run: |
+          cd $GITHUB_WORKSPACE
+          zip -q -r Release.zip $GITHUB_WORKSPACE/Release/*
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v1.0
