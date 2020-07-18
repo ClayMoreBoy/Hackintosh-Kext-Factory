@@ -9,6 +9,7 @@ jobs:
   build:
     runs-on: macos-10.15
     steps:
+      - uses: ilammy/setup-nasm@v1
       - uses: actions/checkout@v2.2.0
       # Prepare for release and src results
       - name: Prepare Make Dir
@@ -79,11 +80,11 @@ jobs:
           xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/VoodooPS2/
           xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-      # - name: Build OpenCore
-      #   run: |
-      #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
-      #     sh build_oc.tool
-      #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
+      - name: Build OpenCore
+        run: |
+          cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
+          sh build_oc.tool
+          cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
       - name: Package Release
         run: |
           cd $GITHUB_WORKSPACE
