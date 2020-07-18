@@ -8,9 +8,8 @@ on:
 jobs:
   build:
     env:
-      BUILD_DIR: $GITHUB_WORKSPACE
-      SRC_DIR: $BUILD_DIR/Sources
-      RELEASE_DIR: $BUILD_DIR/Release
+      SRC_DIR: Sources
+      RELEASE_DIR: Release
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2.2.0
@@ -53,8 +52,7 @@ jobs:
           cp -r $RELEASE_DIR/tmp/Lilu.kext ./DebugEnhancer
           cp -r $RELEASE_DIR/tmp/VoodooInput.kext ./VoodooPS2
           # clear
-          rm -rf $RELEASE_DIR
-          mkdir -p $RELEASE_DIR
+          rm -rf $RELEASE_DIR/tmp
       - name: Build Kext
         id: Kext
         run: |
@@ -87,7 +85,6 @@ jobs:
           cd $SRC_DIR/OpenCorePkg
       - name: Package Release
         run: |
-          cd $BUILD_DIR
           zip -q -r Release.zip $RELEASE_DIR
       - name: Get current time
         id: date
