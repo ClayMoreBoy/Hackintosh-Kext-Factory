@@ -7,20 +7,17 @@ on:
     branches: [ master ]
 jobs:
   build:
-    env:
-      SRC_DIR: Sources
-      RELEASE_DIR: Release
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2.2.0
       # Prepare for release and src results
       - name: Prepare Make Dir
         run: |
-          mkdir -p $SRC_DIR $RELEASE_DIR
+          mkdir -p $GITHUB_WORKSPACE/Sources $GITHUB_WORKSPACE/Release
           xcodebuild -version
       - name: Clone Code
         run: |
-          cd $SRC_DIR
+          cd $GITHUB_WORKSPACE/Sources
           git clone --depth=1 https://github.com/acidanthera/Lilu
           git clone --depth=1 https://github.com/acidanthera/VirtualSMC
           git clone --depth=1 https://github.com/acidanthera/AirportBrcmFixup
@@ -39,53 +36,53 @@ jobs:
           git clone --depth=1 https://github.com/acidanthera/VoodooPS2
       - name: Copy Lilu VoodooInput  Debug File
         run: |
-          mkdir -p $RELEASE_DIR/tmp
-          cd $SRC_DIR
-          xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
-          xcodebuild -project ./VoodooInput/VoodooInput.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$RELEASE_DIR/tmp
+          mkdir -p $GITHUB_WORKSPACE/Release/tmp
+          cd $GITHUB_WORKSPACE/Sources
+          xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release/tmp
+          xcodebuild -project ./VoodooInput/VoodooInput.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release/tmp
           # copy lib
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./WhateverGreen
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./AppleALC
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./AirportBrcmFixup
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./VirtualSMC
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./ThunderboltReset
-          cp -r $RELEASE_DIR/tmp/Lilu.kext ./DebugEnhancer
-          cp -r $RELEASE_DIR/tmp/VoodooInput.kext ./VoodooPS2
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./WhateverGreen
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./AppleALC
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./AirportBrcmFixup
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./VirtualSMC
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./ThunderboltReset
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./DebugEnhancer
+          cp -r $GITHUB_WORKSPACE/Release/tmp/VoodooInput.kext ./VoodooPS2
           # clear
-          rm -rf $RELEASE_DIR/tmp
+          rm -rf $GITHUB_WORKSPACE/Release/tmp
       - name: Build Kext
         id: Kext
         run: |
-          cd $SRC_DIR/AirportBrcmFixup/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/WhateverGreen/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/AppleALC/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/VirtualSMC/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/IOJones/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/IntelMausiEthernet/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/RTL8111_driver_for_OS_X/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/AtherosE2200Ethernet/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/RealtekRTL8100/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/ThunderboltReset/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/DebugEnhancer/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/VoodooInput/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/VoodooPS2/
-          xcodebuild CONFIGURATION_BUILD_DIR=$SRC_DIR/Release
-          cd $SRC_DIR/OpenCorePkg
+          cd $GITHUB_WORKSPACE/Sources/AirportBrcmFixup/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/WhateverGreen/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/AppleALC/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/VirtualSMC/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/IOJones/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/IntelMausiEthernet/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/RTL8111_driver_for_OS_X/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/AtherosE2200Ethernet/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/RealtekRTL8100/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/ThunderboltReset/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/DebugEnhancer/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/VoodooInput/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/VoodooPS2/
+          xcodebuild CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Sources/Release
+          cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       - name: Package Release
         run: |
-          zip -q -r Release.zip $RELEASE_DIR
+          zip -q -r Release.zip $GITHUB_WORKSPACE/Release
       - name: Get current time
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
