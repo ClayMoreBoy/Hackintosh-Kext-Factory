@@ -18,10 +18,6 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/Sources $GITHUB_WORKSPACE/Release
           xcodebuild -version
-      - name: setup-latest-xcode
-        uses: maxim-lobanov/setup-xcode@1.0
-        with:
-          xcode-version: latest # set the latest available Xcode 11.4.*
       - name: Clone Code
         run: |
           cd $GITHUB_WORKSPACE/Sources
@@ -63,7 +59,7 @@ jobs:
         id: Kext
         run: |
           cd $GITHUB_WORKSPACE/Sources/itlwm/
-          xcodebuild -alltargets -configuration Release
+          xcodebuild -alltargets
           cp -r $GITHUB_WORKSPACE/Sources/itlwm/build/Release/* $GITHUB_WORKSPACE/Release
           # build
           cd $GITHUB_WORKSPACE/Sources/AirportBrcmFixup/
