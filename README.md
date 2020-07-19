@@ -54,5 +54,5 @@
 
 > https://github.com/acidanthera/VoodooPS2
 
-> https://github.com/OpenIntelWireless/itlwm.git
+> ~~https://github.com/OpenIntelWireless/itlwm.git~~
 
