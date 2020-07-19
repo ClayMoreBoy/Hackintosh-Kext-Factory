@@ -21,24 +21,24 @@ jobs:
       - name: Clone Code
         run: |
           cd $GITHUB_WORKSPACE/Sources
-          git clone --depth=1 https://github.com/acidanthera/Lilu
-          git clone --depth=1 https://github.com/acidanthera/VirtualSMC
-          git clone --depth=1 https://github.com/acidanthera/AirportBrcmFixup
-          git clone --depth=1 https://github.com/acidanthera/AppleALC
-          git clone --depth=1 https://github.com/acidanthera/WhateverGreen
-          git clone --depth=1 https://github.com/acidanthera/IOJones
-          git clone --depth=1 https://github.com/Mieze/IntelMausiEthernet
-          git clone --depth=1 https://github.com/Mieze/RTL8111_driver_for_OS_X
-          git clone --depth=1 https://github.com/Mieze/AtherosE2200Ethernet
-          git clone --depth=1 https://github.com/Mieze/RealtekRTL8100
-          git clone --depth=1 https://github.com/osy86/ThunderboltReset
-          git clone --depth=1 https://github.com/acidanthera/DebugEnhancer
-          git clone --depth=1 https://github.com/Mieze/LucyRTL8125Ethernet
-          git clone --depth=1 https://github.com/acidanthera/OpenCorePkg
-          git clone --depth=1 https://github.com/acidanthera/VoodooInput
-          git clone --depth=1 https://github.com/acidanthera/VoodooPS2
-          git clone --depth=1 https://github.com/acidanthera/IntelMausi.git
-          git clone --depth=1 https://github.com/OpenIntelWireless/itlwm.git
+          git clone https://github.com/acidanthera/Lilu
+          git clone https://github.com/acidanthera/VirtualSMC
+          git clone https://github.com/acidanthera/AirportBrcmFixup
+          git clone https://github.com/acidanthera/AppleALC
+          git clone https://github.com/acidanthera/WhateverGreen
+          git clone https://github.com/acidanthera/IOJones
+          git clone https://github.com/Mieze/IntelMausiEthernet
+          git clone https://github.com/Mieze/RTL8111_driver_for_OS_X
+          git clone https://github.com/Mieze/AtherosE2200Ethernet
+          git clone https://github.com/Mieze/RealtekRTL8100
+          git clone https://github.com/osy86/ThunderboltReset
+          git clone https://github.com/acidanthera/DebugEnhancer
+          git clone https://github.com/Mieze/LucyRTL8125Ethernet
+          git clone https://github.com/acidanthera/OpenCorePkg
+          git clone https://github.com/acidanthera/VoodooInput
+          git clone https://github.com/acidanthera/VoodooPS2
+          git clone https://github.com/acidanthera/IntelMausi.git
+          git clone https://github.com/OpenIntelWireless/itlwm.git
       - name: Copy Lilu VoodooInput  Debug File
         run: |
           mkdir -p $GITHUB_WORKSPACE/Release/tmp
