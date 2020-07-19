@@ -58,6 +58,10 @@ jobs:
       - name: Build Kext
         id: Kext
         run: |
+          cd $GITHUB_WORKSPACE/Sources/itlwm/
+          xcodebuild -alltargets -configuration Release
+          cp -r $GITHUB_WORKSPACE/Sources/itlwm/build/Release/* $GITHUB_WORKSPACE/Release
+          # build
           cd $GITHUB_WORKSPACE/Sources/AirportBrcmFixup/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/WhateverGreen/
@@ -86,9 +90,6 @@ jobs:
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          cd $GITHUB_WORKSPACE/Sources/itlwm/
-          xcodebuild -configuration Release -alltargets -sdk macosx10.15
-          cp -r $GITHUB_WORKSPACE/Sources/itlwm/build/Release/* $GITHUB_WORKSPACE/Release
       # - name: Build OpenCore
       #   run: |
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
