@@ -98,7 +98,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           cd $GITHUB_WORKSPACE/Release/*
-          unzip IntelMausi*.zip
           rm -rf *dSYM
           rm -rf package    
           git init
