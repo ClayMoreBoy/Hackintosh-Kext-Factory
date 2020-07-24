@@ -127,7 +127,7 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.kext.outputs.status == 'success' && !cancelled()
         with:
-          name: ${{ env.RELEASE_TAG }}-Hackintosh-Kext
+          name: ${{ env.RELEASE_DATE }}-Hackintosh-Kext
           path: ${{ env.FIRMWARE }}
       
       # 生成标签
