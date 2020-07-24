@@ -108,7 +108,7 @@ jobs:
           git config user.email "claymor3.sky@gmail.com"
           git add .
           git commit -m "Update Hackintosh-Kext-Factory"
-          git push --force --quiet https://${{ secrets.RELEASE_TOKEN }}@$GITHUB HEAD:Hackintosh-Kext-Factory
+          git push --force --quiet https://${{ secrets.RELEASE_TOKEN }}@github.com/ClayMoreBoy/Hackintosh-Kext-Factory.git HEAD:Hackintosh-Kext-Factory
       
       - name: Package Release
         run: |
