@@ -111,8 +111,6 @@ jobs:
       #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
       # 上传到分支 By yfdoor
       - name: Upload Branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           cd $GITHUB_WORKSPACE/Release/*
           rm -rf *dSYM
@@ -123,7 +121,7 @@ jobs:
           git config user.email "claymor3.sky@gmail.com"
           git add .
           git commit -m "Update Hackintosh-Kext-Factory"
-          git push --force --quiet https://${{ secrets.RELEASE_TOKEN }}@github.com/ClayMoreBoy/Hackintosh-Kext-Factory.git HEAD:Hackintosh-Kext-Factory
+          git push --force --quiet https://0d973f5b57464d9c6a3dd03d22f59a315000b450@github.com/ClayMoreBoy/Hackintosh-Kext-Factory.git HEAD:Hackintosh-Kext-Factory
       
       - name: Package Release
         run: |
