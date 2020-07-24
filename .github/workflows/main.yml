@@ -140,7 +140,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: steps.tag.outputs.status == 'success' && !cancelled()
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name:  Hackintosh-Kext🚀 | 自动编译 / ${{ env.RELEASE_TAG }}
           tag_name: ${{ env.RELEASE_DATE }}
