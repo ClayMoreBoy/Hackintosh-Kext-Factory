@@ -109,53 +109,52 @@ jobs:
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       #     sh build_oc.tool
       #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
-      # 上传到分支 By yfdoor
-      - name: Upload Branch
-        env:
-          GITHUB: github.com/ClayMoreBoy/Hackintosh-Kext-Factory.git
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+    # 整理文件
+      - name: Organize Files
+        id: organize
         run: |
-          cd $GITHUB_WORKSPACE/Release/*
+          cd Release/*/*
+          rm -rf package
           rm -rf *dSYM
-          rm -rf package    
-          rm -rf *git
-          git init
-          git config user.name ClayMoreBoy
-          git config user.email claymor3.sky@gmail.com
-          git add .
-          git commit -m "Update Hackintosh-Kext-Factory"
-          git push --force --quiet https://${{ secrets.RELEASE_TOKEN }}@$GITHUB HEAD:Hackintosh-Kext
+          rm -rf Tools
+          echo ::set-env name=RELEASE_TAG::"$(TZ=UTC-8 date +"%Y-%m-%d")"
+          echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-output name=status::success"
+          
+        # 上传固件
+      - name: Upload Firmware Directory
+        uses: actions/upload-artifact@main
+        if: steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          name: ${{ env.RELEASE_TAG }}-Hackintosh-Kext
+          path: ${{ env.FIRMWARE }}
       
-      - name: Package Release
+      # 生成标签
+      - name: Generate Tag
+        id: tag
+        if: steps.organize.outputs.status == 'success' && !cancelled()
         run: |
-          cd $GITHUB_WORKSPACE
-          zip -q -r Release.zip $GITHUB_WORKSPACE/Release/*
-      - name: Get Time
-        id: time
-        uses: nanzm/get-time-action@v1.0
-        with:
-          timeZone: 8
-          format: 'YYYY-MM-DD-HH-mm-ss'
-      - name: create release
-        id: create_release
-        uses: actions/create-release@v1
+          echo "::set-output name=status::success"
+    
+    # 发行固件
+      - name: Upload Firmware To Release
+        uses: softprops/action-gh-release@v1
+        if: steps.organize.outputs.status == 'success' && !cancelled()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
-          tag_name: "Hackintosh-${{ steps.time.outputs.time }}"
-          release_name: "Hackintosh-${{ steps.time.outputs.time }}"
-          body: |
-            Hackintosh
-            - Build-in Pickle formatter now recognizes numpy.array, pandas.DataFrame and pandas.Series
-            - Value now can be saved as file
-          draft: false
-          prerelease: false
-      - name: upload a release Asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Release.zip
-          asset_name: "${{ steps.time.outputs.time }}-Release.zip"
-          asset_content_type: application/zip
+          name: Netgear ${{ env.BRANCH }} 🚀 | 自动编译 / ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_DATE }}
+          body: |            
+            1、本固件为自动编译
+            2、发行版中只提供完整的固件
+            3、需要单独IPK请到分支下载
+            4、源码：${{ env.REPO_URL }}
+            -- Build by ${{ env.BUILD_USER }} @ with Github Action on ${{ env.RELEASE_DATE }}
+            🚀 Auto build | 自动编译
+            🔗 [Cowtransfer | 奶牛快传](${{ env.COWTRANSFER_URL }}) 
+            🔗 [WeTransfer](${{ env.WETRANSFER_URL }})       
+            当前使用版本:（编译前的最后一次大雕源码更新记录）            
+            ${{ env.useVersionInfo }}
+            ${{ github.event.commits[0].message }}
+          files: ${{ env.FIRMWARE }}/*
