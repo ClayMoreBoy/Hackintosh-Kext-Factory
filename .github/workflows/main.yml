@@ -92,6 +92,22 @@ jobs:
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       #     sh build_oc.tool
       #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
+      # 上传到分支 By yfdoor
+      - name: Upload Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          cd $GITHUB_WORKSPACE/Release/*
+          unzip IntelMausi*.zip
+          rm -rf *dSYM
+          rm -rf package    
+          git init
+          git config user.name "ClayMoreBoy"
+          git config user.email "claymor3.sky@gmail.com"
+          git add .
+          git commit -m "Update Hackintosh-Kext-Factory"
+          git push --force --quiet https://${{ secrets.RELEASE_TOKEN }}@$GITHUB HEAD:Hackintosh-Kext-Factory
+      
       - name: Package Release
         run: |
           cd $GITHUB_WORKSPACE
