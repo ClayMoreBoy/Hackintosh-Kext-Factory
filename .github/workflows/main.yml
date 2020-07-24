@@ -27,6 +27,7 @@ jobs:
           git clone https://github.com/acidanthera/AppleALC
           git clone https://github.com/acidanthera/WhateverGreen
           git clone https://github.com/acidanthera/IOJones
+          git clone https://github.com/acidanthera/CPUFriend
           git clone https://github.com/acidanthera/RTCMemoryFixup
           git clone https://github.com/Mieze/IntelMausiEthernet
           git clone https://github.com/Mieze/RTL8111_driver_for_OS_X
@@ -40,6 +41,7 @@ jobs:
           git clone https://github.com/acidanthera/VoodooPS2
           git clone https://github.com/acidanthera/IntelMausi.git
           git clone https://github.com/al3xtjames/NoTouchID.git
+          git clone https://github.com/OpenIntelWireless/IntelBluetoothFirmware
           git clone https://github.com/OpenIntelWireless/itlwm.git
       - name: Copy Lilu VoodooInput  Debug File
         run: |
@@ -56,6 +58,7 @@ jobs:
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./DebugEnhancer
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./NoTouchID
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./RTCMemoryFixup
+          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./CPUFriend
           cp -r $GITHUB_WORKSPACE/Release/tmp/VoodooInput.kext ./VoodooPS2
           # clear
           rm -rf $GITHUB_WORKSPACE/Release/tmp
@@ -93,7 +96,11 @@ jobs:
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/RTCMemoryFixup/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
+          cd $GITHUB_WORKSPACE/Sources/CPUFriend/
+          xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
+          xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
+          cd $GITHUB_WORKSPACE/Sources/IntelBluetoothFirmware/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
       #    cd $GITHUB_WORKSPACE/Sources/itlwm/
       #    xcodebuild -target itlwm -configuration Release -project itlwm.xcodeproj CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
