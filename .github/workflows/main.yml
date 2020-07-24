@@ -115,9 +115,6 @@ jobs:
         id: organize
         run: |
           cd Release/*
-          rm -rf package
-          rm -rf *dSYM
-          rm -rf Tools
           echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
