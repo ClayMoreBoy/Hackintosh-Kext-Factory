@@ -20,7 +20,7 @@ jobs:
           xcodebuild -version
       - name: Clone Code
         run: |
-          cd $GITHUB_WORKSPACE/Sources
+          cd $GITHUB_WORKSPACE
           git clone https://github.com/acidanthera/Lilu
           git clone https://github.com/acidanthera/VirtualSMC
           git clone https://github.com/acidanthera/AirportBrcmFixup
