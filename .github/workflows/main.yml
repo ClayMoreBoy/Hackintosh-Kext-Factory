@@ -114,7 +114,7 @@ jobs:
       - name: Organize Files
         id: organize
         run: |
-          cd $GITHUB_WORKSPACE/Release/*
+          cd $GITHUB_WORKSPACE/Release/
           echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
