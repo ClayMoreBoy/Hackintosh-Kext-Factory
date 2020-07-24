@@ -87,8 +87,8 @@ jobs:
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          cd $GITHUB_WORKSPACE/Sources/itlwm/
-          xcodebuild -target itlwm -configuration Release -project itlwm.xcodeproj CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
+      #    cd $GITHUB_WORKSPACE/Sources/itlwm/
+      #    xcodebuild -target itlwm -configuration Release -project itlwm.xcodeproj CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
       # - name: Build OpenCore
       #   run: |
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
