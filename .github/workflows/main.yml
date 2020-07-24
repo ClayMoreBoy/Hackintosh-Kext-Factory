@@ -100,6 +100,7 @@ jobs:
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
+          echo "::set-output name=status::success"
       #    cd $GITHUB_WORKSPACE/Sources/IntelBluetoothFirmware/
       #    xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
       #    cd $GITHUB_WORKSPACE/Sources/itlwm/
@@ -113,7 +114,7 @@ jobs:
       - name: Organize Files
         id: organize
         run: |
-          cd Release/*/*
+          cd Release/*
           rm -rf package
           rm -rf *dSYM
           rm -rf Tools
@@ -124,7 +125,7 @@ jobs:
         # 上传固件
       - name: Upload Firmware Directory
         uses: actions/upload-artifact@main
-        if: steps.organize.outputs.status == 'success' && !cancelled()
+        if: steps.kext.outputs.status == 'success' && !cancelled()
         with:
           name: ${{ env.RELEASE_TAG }}-Hackintosh-Kext
           path: ${{ env.FIRMWARE }}
@@ -139,7 +140,7 @@ jobs:
     # 发行固件
       - name: Upload Firmware To Release
         uses: softprops/action-gh-release@v1
-        if: steps.organize.outputs.status == 'success' && !cancelled()
+        if: steps.tag.outputs.status == 'success' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
