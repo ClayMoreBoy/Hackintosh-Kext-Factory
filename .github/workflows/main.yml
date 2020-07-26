@@ -124,6 +124,7 @@ jobs:
           rm -rf rtcread
           rm -rf smc*
           rm -rf *dsl
+          rm -rf package
           echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
@@ -156,4 +157,4 @@ jobs:
           body: |            
             1、本固件为自动编译
             2、发行版中只提供完整的固件
-          files: ${{ env.FIRMWARE }}/*
+          files: ${{ env.FIRMWARE }}/*.kext
