@@ -116,7 +116,7 @@ jobs:
       - name: Organize Files
         id: organize
         run: |
-          cd $GITHUB_WORKSPACE/Release/*
+          cd $GITHUB_WORKSPACE/Release
           unzip IntelMausi*.zip
           rm -rf *dSYM
           rm -rf libaistat.dylib
