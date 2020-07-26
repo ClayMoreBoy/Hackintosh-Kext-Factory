@@ -5,10 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  watch:
-    types: [started]
   schedule:
-    - cron: "0 */8 * * *"
+    - cron: "0 */3 * * *"
 jobs:
   build:
     runs-on: macos-latest
@@ -22,15 +20,13 @@ jobs:
           xcodebuild -version
       - name: Clone Code
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/Sources
           git clone https://github.com/acidanthera/Lilu
           git clone https://github.com/acidanthera/VirtualSMC
           git clone https://github.com/acidanthera/AirportBrcmFixup
           git clone https://github.com/acidanthera/AppleALC
           git clone https://github.com/acidanthera/WhateverGreen
           git clone https://github.com/acidanthera/IOJones
-          git clone https://github.com/acidanthera/CPUFriend
-          git clone https://github.com/acidanthera/RTCMemoryFixup
           git clone https://github.com/Mieze/IntelMausiEthernet
           git clone https://github.com/Mieze/RTL8111_driver_for_OS_X
           git clone https://github.com/Mieze/AtherosE2200Ethernet
@@ -42,8 +38,6 @@ jobs:
           git clone https://github.com/acidanthera/VoodooInput
           git clone https://github.com/acidanthera/VoodooPS2
           git clone https://github.com/acidanthera/IntelMausi.git
-          git clone https://github.com/al3xtjames/NoTouchID.git
-          git clone https://github.com/OpenIntelWireless/IntelBluetoothFirmware
           git clone https://github.com/OpenIntelWireless/itlwm.git
       - name: Copy Lilu VoodooInput  Debug File
         run: |
@@ -58,9 +52,6 @@ jobs:
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./VirtualSMC
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./ThunderboltReset
           cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./DebugEnhancer
-          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./NoTouchID
-          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./RTCMemoryFixup
-          cp -r $GITHUB_WORKSPACE/Release/tmp/Lilu.kext ./CPUFriend
           cp -r $GITHUB_WORKSPACE/Release/tmp/VoodooInput.kext ./VoodooPS2
           # clear
           rm -rf $GITHUB_WORKSPACE/Release/tmp
@@ -94,60 +85,43 @@ jobs:
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/VoodooPS2/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          cd $GITHUB_WORKSPACE/Sources/NoTouchID/
-          xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          cd $GITHUB_WORKSPACE/Sources/RTCMemoryFixup/
-          xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          cd $GITHUB_WORKSPACE/Sources/CPUFriend/
-          xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-          echo "::set-output name=status::success"
-      #    cd $GITHUB_WORKSPACE/Sources/IntelBluetoothFirmware/
-      #    xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
-      #    cd $GITHUB_WORKSPACE/Sources/itlwm/
-      #    xcodebuild -target itlwm -configuration Release -project itlwm.xcodeproj CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
       # - name: Build OpenCore
       #   run: |
       #     cd $GITHUB_WORKSPACE/Sources/OpenCorePkg
       #     sh build_oc.tool
       #     cp $GITHUB_WORKSPACE/Sources/OpenCorePkg/Binaries/* $GITHUB_WORKSPACE/Release
-    # 整理文件
-      - name: Organize Files
-        id: organize
+      - name: Package Release
         run: |
-          cd $GITHUB_WORKSPACE/Release
-          rm -rf *dSYM
-          echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
-          echo "::set-env name=FIRMWARE::$PWD"
-          echo "::set-output name=status::success"
-          
-        # 上传固件
-      - name: Upload Firmware Directory
-        uses: actions/upload-artifact@main
-        if: steps.kext.outputs.status == 'success' && !cancelled()
+          cd $GITHUB_WORKSPACE
+          zip -q -r Release.zip $GITHUB_WORKSPACE/Release/*
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.0
         with:
-          name: ${{ env.RELEASE_DATE }}-Hackintosh-Kext
-          path: ${{ env.FIRMWARE }}
-      
-      # 生成标签
-      - name: Generate Tag
-        id: tag
-        if: steps.organize.outputs.status == 'success' && !cancelled()
-        run: |
-          echo ::set-env name=RELEASE_TAG::"$(TZ=UTC-8 date +"%Y-%m-%d")"
-          echo "::set-output name=status::success"
-    
-    # 发行固件
-      - name: Upload Firmware To Release
-        uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.status == 'success' && !cancelled()
+          timeZone: 8
+          format: 'YYYY-MM-DD-HH-mm-ss'
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name:  Hackintosh-Kext🚀 | 自动编译 / ${{ env.RELEASE_TAG }}
-          tag_name: ${{ env.RELEASE_DATE }}
-          body: |            
-            1、本固件为自动编译
-            2、发行版中只提供完整的固件
-          files: ${{ env.FIRMWARE }}/*
+          tag_name: "Hackintosh-${{ steps.time.outputs.time }}"
+          release_name: "Hackintosh-${{ steps.time.outputs.time }}"
+          body: |
+            Hackintosh
+            - Build-in Pickle formatter now recognizes numpy.array, pandas.DataFrame and pandas.Series
+            - Value now can be saved as file
+          draft: false
+          prerelease: false
+      - name: upload a release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Release.zip
+          asset_name: "${{ steps.time.outputs.time }}-Release.zip"
+          asset_content_type: application/zip
