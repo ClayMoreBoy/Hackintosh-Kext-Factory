@@ -157,4 +157,4 @@ jobs:
           body: |            
             1、本固件为自动编译
             2、发行版中只提供完整的固件
-          files: ${{ env.FIRMWARE }}/*.kext
+          files: zip ${{ env.FIRMWARE }}/*
