@@ -126,7 +126,7 @@ jobs:
           rm -rf smc*
           rm -rf *dsl
           rm -rf package
-          unzip -q IntelMausi*.zip
+          unzip -q -r -n IntelMausi*.zip
           zip -q ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
           rm -rf IntelMausi*.zip
           echo "::set-env name=FIRMWARE::$PWD"
