@@ -103,6 +103,7 @@ jobs:
           cd $GITHUB_WORKSPACE/Sources/IntelMausi/
           xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
           echo "::set-output name=status::success"
+          echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
       #    cd $GITHUB_WORKSPACE/Sources/IntelBluetoothFirmware/
       #    xcodebuild -configuration Release CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/Release
       #    cd $GITHUB_WORKSPACE/Sources/itlwm/
@@ -125,8 +126,9 @@ jobs:
           rm -rf smc*
           rm -rf *dsl
           rm -rf package
-          zip -q -r Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
-          echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
+          unzip -q IntelMausi*.zip
+          zip -q ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
+          rm -rf IntelMausi*.zip
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
           
