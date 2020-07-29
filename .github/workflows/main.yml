@@ -118,6 +118,7 @@ jobs:
         id: organize
         run: |
           cd $GITHUB_WORKSPACE/Release
+          unzip -q -n IntelMausi*.zip
           rm -rf *dSYM
           rm -rf libaistat.dylib
           rm -rf DeviceGenerator
@@ -126,9 +127,8 @@ jobs:
           rm -rf smc*
           rm -rf *dsl
           rm -rf package
-          unzip -q -n IntelMausi*.zip
-          zip -q ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
-          rm -rf IntelMausi*.zip
+          rm -rf IntelMausi*
+          zip -q -r ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip ./*
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
           
