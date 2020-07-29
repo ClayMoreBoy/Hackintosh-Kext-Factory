@@ -125,7 +125,7 @@ jobs:
           rm -rf smc*
           rm -rf *dsl
           rm -rf package
-          zip -q -r ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
+          zip -q -r Hackintosh-Kext-Release.zip $GITHUB_WORKSPACE/Release/*
           echo ::set-env name=RELEASE_DATE::"$(TZ=UTC-8 date +"%Y-%m-%d")"
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
