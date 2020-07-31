@@ -128,7 +128,7 @@ jobs:
           rm -rf *dsl
           rm -rf package
           rm -rf IntelMausi*.zip
-          zip -q -r ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip ./*
+          zip -q -r Hackintosh-Kext-${{ env.RELEASE_DATE }}-Release.zip ./*
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
           
@@ -137,7 +137,7 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.kext.outputs.status == 'success' && !cancelled()
         with:
-          name: ${{ env.RELEASE_DATE }}-Hackintosh-Kext
+          name: Hackintosh-Kext-${{ env.RELEASE_DATE }}
           path: ${{ env.FIRMWARE }}
       
       # 生成标签
@@ -157,7 +157,7 @@ jobs:
         with:
           name:  Hackintosh-Kext🚀 | 自动编译 / ${{ env.RELEASE_TAG }}
           tag_name: ${{ env.RELEASE_TAG }}
-          body: |            
-            1、本固件为自动编译
-            2、发行版中只提供完整的固件
+          body: |
+            1、本驱动包为自动编译
+            2、发行版中只提供完整的黑苹果常用驱动
           files: ${{ env.FIRMWARE }}/*
