@@ -127,7 +127,7 @@ jobs:
           rm -rf smc*
           rm -rf *dsl
           rm -rf package
-          rm -rf IntelMausi*
+          rm -rf IntelMausi*.zip
           zip -q -r ${{ env.RELEASE_DATE }}-Hackintosh-Kext-Release.zip ./*
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
