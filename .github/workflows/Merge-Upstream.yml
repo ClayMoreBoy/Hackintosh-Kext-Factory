@@ -14,9 +14,9 @@ on:
     - cron: 0 20 * * *
 
 # 编辑触发
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 
 # 点赞触发
 #  watch:
