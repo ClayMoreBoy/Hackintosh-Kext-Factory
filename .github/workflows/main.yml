@@ -2,7 +2,7 @@ name: Hackintosh Kernel Extensions Repo
 
 on:
   push:
-    branches: main
+    branches: master
   schedule:
     - cron: '0 22 * * *'
 
