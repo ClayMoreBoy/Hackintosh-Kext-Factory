@@ -3,12 +3,12 @@ name: Hackintosh CI
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  watch:
-    types: [started]
+  #pull_request:
+  #  branches: [ master ]
+  # watch:
+  #  types: [started]
   schedule:
-    - cron: "0 20 * * *"
+    - cron: "0 0 0 0 1"
 jobs:
   build:
     runs-on: macos-latest
