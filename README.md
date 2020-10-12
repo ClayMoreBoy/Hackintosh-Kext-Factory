@@ -20,40 +20,50 @@
 # Note
 ## Hackintosh Auto Compile Kext:
 *****
-> https://github.com/acidanthera/Lilu
+# Hackintosh Kernel Extensions Repo
 
-> https://github.com/acidanthera/VirtualSMC
+## 构建时间
+每天 22:00 UTC
 
-> https://github.com/acidanthera/AirportBrcmFixup
+## 已覆盖的驱动清单
+- Lilu
+- VoodooInput
+- AirportBrcmFixup
+- AppleALC
+- BrightnessKeys
+- CPUFriend
+- CpuTscSync
+- DebugEnhancer
+- HibernationFixup
+- NVMeFix
+- RTCMemoryFixup
+- VirtualSMC
+- WhateverGreen
+- AMFIExemption
+- ATH9KFixup
+- DiskArbitrationFixup
+- Innie
+- MacProMemoryNotificationDisabler
+- NightShiftEnabler
+- NoTouchID
+- SystemProfilerMemoryFixup
+- ThunderboltReset
+- IntelMausi
+- AtherosE2200Ethernet
+- RTL8111_driver_for_OS_X
+- LucyRTL8125Ethernet
+- RealtekRTL8100
+- BrcmPatchRAM
+- VoodooPS2
+- VoodooI2C
 
-> https://github.com/acidanthera/AppleALC
+## 声明
+- 仓库中的编译结果全部是自动生成的，未经任何测试。
+- 本人不对仓库中的任何编译结果负责。
+- 请自行承担使用本仓库编译结果的一切后果！
 
-> https://github.com/acidanthera/WhateverGreen
+## Release 自行下载
 
-> https://github.com/acidanthera/IOJones
+Fork https://github.com/athlonreg/HackintoshKernelExtensionsRepo 
+https://github.com/usnail/Hackintosh-Factory
 
-> https://github.com/Mieze/IntelMausiEthernet
- 
-> https://github.com/acidanthera/IntelMausi.git
- 
-> https://github.com/Mieze/RTL8111_driver_for_OS_X
- 
-> https://github.com/Mieze/AtherosE2200Ethernet
- 
-> https://github.com/Mieze/RealtekRTL8100
- 
-> https://github.com/osy86/ThunderboltReset
- 
-> https://github.com/acidanthera/DebugEnhancer
-
-> https://github.com/Mieze/LucyRTL8125Ethernet
- 
-> ~~https://github.com/acidanthera/OpenCorePkg~~
-
-> https://github.com/acidanthera/VoodooInput
-
-> https://github.com/acidanthera/VoodooPS2
-
-> ~~https://github.com/OpenIntelWireless/itlwm~~ (本地可编译 线上调整中）
-
-Fork https://github.com/usnail/Hackintosh-Factory
