@@ -9,8 +9,6 @@ on:
 env:
   # 编译者
   BUILD_USER: ClayMoreBoy
-  # 上传到奶牛快传
-  UPLOAD_COWTRANSFER: true
 
 jobs:
   build:
@@ -263,7 +261,6 @@ jobs:
 
     # 上传固件到奶牛快传
     - name: Upload Firmware To CowTransfer
-      if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
@@ -271,7 +268,6 @@ jobs:
         echo "::set-env name=COWTRANSFER_URL::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
     
     - name: Upload firmware to WeTransfer
-      if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
