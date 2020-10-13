@@ -1,10 +1,16 @@
-name: Hackintosh Kernel Extensions Repo
+name: Hackintosh Kext Factory
 
 on:
   push:
     branches: master
   schedule:
     - cron: '0 22 * * *'
+
+env:
+  # 编译者
+  BUILD_USER: ClayMoreBoy
+  # 上传到奶牛快传
+  UPLOAD_COWTRANSFER: true
 
 jobs:
   build:
@@ -223,8 +229,36 @@ jobs:
           cd ../
         done
         
+        ### Itlwm
+        mkdir -p release/itlwm
+        git clone -q https://github.com/OpenIntelWireless/itlwm --depth=5
+        cd itlwm && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
+        xcodebuild -scheme itlwm -configuration Debug -derivedDataPath build | xcpretty
+        xcodebuild -scheme "AirportItlwm (all)" -configuration Debug -derivedDataPath build | xcpretty
+        eval $(grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " ")
+        echo "::set-env name=ITLWM_VER::$MODULE_VERSION"
+        cd build/Build/Products/Debug
+        zip -r itlwm-v${ITLWM_VER}-DEBUG-alpha.zip itlwm.kext
+        while read -r tgt ; do
+          zip -r AirportItlwm-${tgt// /_}-v${ITLWM_VER}-DEBUG-alpha.zip "$tgt"
+        done < <(find . -mindepth 1 -maxdepth 1 -type d -not -path "*.kext" | cut -c 3-)
+        cd -
+        cp -Rf build/Build/Products/Debug/*.zip ../release/itlwm/
+        cd ../
+        
+        ### IntelBluetoothFirmware
+        mkdir -p release/IntelBluetoothFirmware/Debug
+        mkdir -p release/IntelBluetoothFirmware/Release
+        git clone -q https://github.com/OpenIntelWireless/IntelBluetoothFirmware.git
+        cd IntelBluetoothFirmware && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
+        xcodebuild -alltargets -configuration Debug | xcpretty
+        xcodebuild -alltargets -configuration Release | xcpretty
+        cp -Rf build/Debug/*.kext  ../release/IntelBluetoothFirmware/Debug/
+        cp -Rf build/Release/*  ../release/IntelBluetoothFirmware/Release/
+        cd ..
+        
         ## Package
-        zip -qry -FS $(date +%Y-%m-%d).zip release
+        zip -qry -FS ${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
 
     - name: Create Release
       id: create_release
@@ -247,6 +281,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ env.TAGNAME }}.zip
-        asset_name: ${{ env.TAGNAME }}.zip
+        asset_path: ./${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip
+        asset_name: ${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip
         asset_content_type: application/zip
