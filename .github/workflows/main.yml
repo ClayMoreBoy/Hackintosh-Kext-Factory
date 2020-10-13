@@ -259,7 +259,25 @@ jobs:
         
         ## Package
         zip -qry -FS ${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
+        echo "::set-env name=FIRMWARE::$PWD"
 
+    # 上传固件到奶牛快传
+    - name: Upload Firmware To CowTransfer
+      if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+        echo "::set-env name=COWTRANSFER_URL::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+    
+    - name: Upload firmware to WeTransfer
+      if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-env name=WETRANSFER_URL::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+    
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -271,6 +289,9 @@ jobs:
         body: |
             1、本驱动集合包为自动编译
             2、发行版中只提供常用的黑苹果常用驱动
+            🚀 Auto build | 自动编译
+            🔗 [Cowtransfer | 奶牛快传](${{ env.COWTRANSFER_URL }}) 
+            🔗 [WeTransfer](${{ env.WETRANSFER_URL }})
         draft: false
         prerelease: false
     
