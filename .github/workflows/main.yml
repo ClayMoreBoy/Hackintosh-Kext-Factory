@@ -257,6 +257,7 @@ jobs:
         
         ## Package
         zip -qry -FS ${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
+        cd release
         echo "::set-env name=FIRMWARE::$PWD"
 
     # 上传固件到奶牛快传
