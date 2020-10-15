@@ -56,6 +56,8 @@
 - BrcmPatchRAM
 - VoodooPS2
 - VoodooI2C
+- itlwm
+- IntelBluetoothFirmware
 
 ## 声明
 - 仓库中的编译结果全部是自动生成的，未经任何测试。
@@ -64,6 +66,7 @@
 
 ## Release 自行下载
 
-Fork https://github.com/athlonreg/HackintoshKernelExtensionsRepo 
-https://github.com/usnail/Hackintosh-Factory
+Fork https://github.com/athlonreg/HackintoshKernelExtensionsRepo
+
+https://github.com/usnail/Hackintosh-Factory (已弃用)
 
