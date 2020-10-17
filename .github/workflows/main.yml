@@ -262,16 +262,18 @@ jobs:
 
     # 上传固件到奶牛快传
     - name: Upload Firmware To CowTransfer
+      working-directory: ./release
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${FIRMWARE}/release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee cowtransfer.log
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress "./release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip" 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
         echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
     
     - name: Upload firmware to WeTransfer
+      working-directory: ./release
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE}/release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee wetransfer.log
+        ./transfer wet -s -p 16 --no-progress "./release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip" 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
     
