@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@main
       
     - name: Package
       run: |
@@ -258,26 +258,26 @@ jobs:
         ## Package
         zip -qry -FS ${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
         cd release
-        echo "::set-env name=FIRMWARE::$PWD"
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
     # 上传固件到奶牛快传
     - name: Upload Firmware To CowTransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee cowtransfer.log
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${FIRMWARE}/release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-        echo "::set-env name=COWTRANSFER_URL::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
     
     - name: Upload firmware to WeTransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee wetransfer.log
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE}/release/${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-        echo "::set-env name=WETRANSFER_URL::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
     
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: actions/create-release@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -286,15 +286,24 @@ jobs:
         body: |
             1、本驱动集合包为自动编译
             2、发行版中只提供常用的黑苹果常用驱动
-            🚀 Auto build | 自动编译
-            🔗 [Cowtransfer | 奶牛快传](${{ env.COWTRANSFER_URL }}) 
-            🔗 [WeTransfer](${{ env.WETRANSFER_URL }})
+            由衷感谢所有为黑苹果无私奉献的大佬们
+            🔗 国内[Cowtransfer | 奶牛快传](${{ steps.cowtransfer.outputs.url }}) 
+            🔗 国外[WeTransfer](${{ steps.wetransfer.outputs.url }})
         draft: false
         prerelease: false
     
+    - name: 删除旧的Releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      with:
+        keep_latest: 9
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Upload Release Asset
       id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
