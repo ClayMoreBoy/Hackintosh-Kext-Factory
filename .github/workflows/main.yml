@@ -294,7 +294,6 @@ jobs:
     
     - name: 删除旧的Releases
       uses: dev-drprasad/delete-older-releases@master
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         keep_latest: 9
         delete_tags: true
