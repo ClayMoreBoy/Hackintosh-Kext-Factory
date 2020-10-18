@@ -258,7 +258,7 @@ jobs:
         cd ../release
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
-    # 上传固件到奶牛快传
+    # 上传固件到奶牛快传~
     - name: Upload Firmware To CowTransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
