@@ -31,7 +31,6 @@ jobs:
         echo "==========================================================================="
         git clone -q https://github.com/acidanthera/Lilu.git && cd Lilu
         cp -r ../MacKernelSDK .
-        xcodebuild -configuration Debug > /dev/null 2>&1
         xcodebuild -configuration Release > /dev/null 2>&1
         cd ..
         cp Lilu/build/*/*.zip release/Lilu/
@@ -42,7 +41,6 @@ jobs:
         echo "==========================================================================="
         git clone -q https://github.com/acidanthera/VoodooInput.git && cd VoodooInput
         cp -r ../MacKernelSDK .
-        xcodebuild -configuration Debug > /dev/null 2>&1
         xcodebuild -configuration Release > /dev/null 2>&1
         cd ..
         cp VoodooInput/build/*/*.zip release/VoodooInput/
@@ -72,14 +70,11 @@ jobs:
           cd ${plugin%,*}
           cp -Rf ../Lilu/build/Debug/Lilu.kext .
           cp -r ../MacKernelSDK .
-          xcodebuild -configuration Debug > /dev/null 2>&1
           xcodebuild -configuration Release > /dev/null 2>&1
           if [ -e build/Release/*.zip ]; then
             cp -f build/*/*.zip ../release/${plugin%,*}
           else
-            mkdir -p ../release/${plugin%,*}/Debug
             mkdir -p ../release/${plugin%,*}/Release
-            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
@@ -109,14 +104,11 @@ jobs:
             wget -q https://github.com/acidanthera/Lilu/releases/download/1.4.7/Lilu-1.4.7-DEBUG.zip
             unzip -q Lilu-1.4.7-DEBUG.zip && rm -rf Lilu-1.4.7-DEBUG.zip
           fi
-          xcodebuild -configuration Debug > /dev/null 2>&1
           xcodebuild -configuration Release > /dev/null 2>&1
           if [ -e build/Release/*.zip ]; then
             cp -f build/*/*.zip ../release/${plugin%,*}
           else
-            mkdir -p ../release/${plugin%,*}/Debug
             mkdir -p ../release/${plugin%,*}/Release
-            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
@@ -140,15 +132,12 @@ jobs:
           cd ${plugin%,*}
           if [[ "${plugin%,*}" == "IntelMausi" ]] ; then
             cp -r ../MacKernelSDK .
-            xcodebuild -configuration Debug
             xcodebuild -configuration Release
             cp -Rf build/*/*.zip ../release/${plugin%,*}
           else
             xcodebuild -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             xcodebuild -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            mkdir -p ../release/${plugin%,*}/Debug
             mkdir -p ../release/${plugin%,*}/Release
-            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
@@ -167,15 +156,11 @@ jobs:
           git clone -q ${plugin##*,} ${plugin%,*} -b master --depth=1
           cd ${plugin%,*}
           cp -r ../MacKernelSDK .
-          xcodebuild -configuration Debug -target Package
           xcodebuild -configuration Release -target Package
           if [ -e build/Products/Release/*.zip ] ; then
-            cp -Rf build/Products/Debug/*.zip ../release/${plugin%,*}
             cp -Rf build/Products/Release/*.zip ../release/${plugin%,*}
           else
-            mkdir -p ../release/${plugin%,*}/Debug
             mkdir -p ../release/${plugin%,*}/Release
-            cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
@@ -197,15 +182,11 @@ jobs:
           if [[ "${plugin%,*}" == "VoodooPS2" ]] ; then
             cp -r ../MacKernelSDK .
             src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh) && eval "$src"
-            xcodebuild -configuration Debug > /dev/null 2>&1
             xcodebuild -configuration Release > /dev/null 2>&1
             if [ -e build/Products/Release/*.zip ] ; then
-              cp -f build/Products/Debug/*.zip ../release/${plugin%,*}
               cp -f build/Products/Release/*.zip ../release/${plugin%,*}
             else
-              mkdir -p ../release/${plugin%,*}/Debug
               mkdir -p ../release/${plugin%,*}/Release
-              cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
               cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
             fi
           else
@@ -243,13 +224,10 @@ jobs:
         cd ../
         
         ### IntelBluetoothFirmware
-        mkdir -p release/IntelBluetoothFirmware/Debug
         mkdir -p release/IntelBluetoothFirmware/Release
         git clone -q https://github.com/OpenIntelWireless/IntelBluetoothFirmware.git
         cd IntelBluetoothFirmware && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
-        xcodebuild -alltargets -configuration Debug | xcpretty
         xcodebuild -alltargets -configuration Release | xcpretty
-        cp -Rf build/Debug/*.kext  ../release/IntelBluetoothFirmware/Debug/
         cp -Rf build/Release/*  ../release/IntelBluetoothFirmware/Release/
         cd ..
         
