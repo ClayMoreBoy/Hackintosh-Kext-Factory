@@ -25,7 +25,6 @@ jobs:
         mkdir -p release/Lilu
         mkdir -p release/VoodooInput
         git clone -q https://github.com/acidanthera/MacKernelSDK.git
-
         ## Lilu Basic Dependency
         echo "==========================================================================="
         echo "========================> Building Lilu Dependency <======================="
@@ -256,21 +255,21 @@ jobs:
         
         ## Package
         zip -qry -FS ${{ env.BUILD_USER }}-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
-        cd ../release
+        cd release
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
-    # 上传固件到奶牛快传~
+    # 上传固件到奶牛快传
     - name: Upload Firmware To CowTransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${FIRMWARE}/${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
         echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
     
     - name: Upload firmware to WeTransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE}/${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
     
