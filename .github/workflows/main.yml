@@ -9,7 +9,6 @@ on:
 env:
   # 编译者
   BUILD_USER: ClayMoreBoy
-
 jobs:
   build:
     runs-on: macos-latest
@@ -25,6 +24,7 @@ jobs:
         mkdir -p release/Lilu
         mkdir -p release/VoodooInput
         git clone -q https://github.com/acidanthera/MacKernelSDK.git
+
         ## Lilu Basic Dependency
         echo "==========================================================================="
         echo "========================> Building Lilu Dependency <======================="
