@@ -293,7 +293,7 @@ jobs:
     - name: 删除旧的Releases
       uses: dev-drprasad/delete-older-releases@master
       with:
-        keep_latest: 3
+        keep_latest: 5
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
