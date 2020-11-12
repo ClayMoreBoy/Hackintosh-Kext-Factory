@@ -20,7 +20,7 @@
 # Note
 ## Hackintosh Auto Compile Kext:
 *****
-# Hackintosh Kernel Extensions Repo
+# Hackintosh Kernel Extensions Repo [![athlonreg](https://img.shields.io/badge/Fork-athlonreg-blue.svg?style=flat&logo=appveyor)](https://github.com/athlonreg) 
 
 ## 构建时间
 每天 22:00 UTC
@@ -65,8 +65,4 @@
 - 请自行承担使用本仓库编译结果的一切后果！
 
 ## Release 自行下载
-
-Fork https://github.com/athlonreg/HackintoshKernelExtensionsRepo
-
-https://github.com/usnail/Hackintosh-Factory (已弃用)
 
