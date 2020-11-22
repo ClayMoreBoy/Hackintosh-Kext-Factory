@@ -21,7 +21,7 @@ jobs:
     - name: Package
       run: |
         ## Basic Env
-        echo ::set-env name=TAGNAME::"$(date +%Y-%m-%d)"
+        echo "TAGNAME=$(date +%Y-%m-%d)" >> $GITHUB_ENV
         mkdir -p release/Lilu
         mkdir -p release/VoodooInput
         git clone -q https://github.com/acidanthera/MacKernelSDK.git
@@ -228,10 +228,13 @@ jobs:
         done
         
         # VoodooI2C
-        brew install wget
-        curl -s https://api.github.com/repos/voodooi2c/voodooi2c/releases/latest | grep browser_download_url | awk -F '"' '{print $4}' | xargs wget
-        mkdir -p release/VoodooI2C
-        mv Voodoo*.zip release/VoodooI2C/
+        ##which wget || brew install wget
+        mkdir -p release/VoodooI2C && cd release/VoodooI2C
+        for i in $(curl -s https://api.github.com/repos/voodooi2c/voodooi2c/releases/latest | grep browser_download_url | awk -F '"' '{print $4}')
+        do 
+          wget $i
+        done
+        cd ../..
         
         ### Itlwm
         mkdir -p release/itlwm
