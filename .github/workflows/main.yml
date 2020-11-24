@@ -278,8 +278,6 @@ jobs:
             1、本驱动集合包为自动编译
             2、发行版中只提供常用的黑苹果常用驱动
             由衷感谢所有为黑苹果无私奉献的大佬们
-            🔗 国内[Cowtransfer | 奶牛快传](${{ env.COWTRANSFER_URL }})
-            🔗 国外[WeTransfer](${{ env.WETRANSFER_URL }})
         draft: false
         prerelease: false
     
