@@ -296,6 +296,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/release/${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip
+        asset_path: ./${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip
         asset_name: ${{ env.BUILD_USER }}-Hackintosh-Kext-${{ env.TAGNAME }}.zip
         asset_content_type: application/zip
