@@ -324,7 +324,7 @@ steps:
 - task: GitHubRelease@0
   displayName: 'Publish GitHub Release'
   inputs:
-    gitHubConnection: release
+    gitHubConnection: ClayMoreBoy
     repositoryName: ClayMoreBoy/Hackintosh-Kext-Factory
     action: edit
     target: '$(Build.SourceVersion)'
