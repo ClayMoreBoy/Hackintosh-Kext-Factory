@@ -1,6 +1,14 @@
 # Starter pipeline
-trigger: master
-pr: master
+trigger: none
+pr: none
+
+schedules:
+- cron: "0 22 * * *"
+  displayName: Schedule Build
+  branches:
+    include:
+    - master
+  always: true
 
 variables:
   BuildCheck: 'False'
