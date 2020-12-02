@@ -7,7 +7,7 @@ schedules:
   displayName: Schedule Build
   branches:
     include:
-    - master
+    - main
   always: true
 
 variables:
