@@ -320,15 +320,3 @@ steps:
       #!/bin/bash
       zip -qry -FS $(date +%Y-%m-%d).zip release
       cp *.zip $(Build.ArtifactStagingDirectory)
-
-- task: GitHubRelease@0
-  displayName: 'Publish GitHub Release'
-  inputs:
-    gitHubConnection: release
-    repositoryName: ClayMoreBoy/Hackintosh-Kext-Factory
-    action: edit
-    target: '$(Build.SourceVersion)'
-    tag: '$(BuildDate)'
-    title: '$(BuildDate)'
-    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
-    isPreRelease: true
