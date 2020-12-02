@@ -326,7 +326,6 @@ steps:
   inputs:
     gitHubConnection: ClayMoreBoy
     repositoryName: ClayMoreBoy/Hackintosh-Kext-Factory
-    action: edit
     target: '$(Build.SourceVersion)'
     tag: '$(BuildDate)'
     title: '$(BuildDate)'
