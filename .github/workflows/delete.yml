@@ -44,7 +44,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.1.0
         if: (github.event.inputs.delete-older-releases == 'true' && github.event.inputs.delete-older-releases  != 'false')
         with:
-          keep_latest: 2         #保留多少个发布不删除
+          keep_latest: 0         #保留多少个发布不删除
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
