@@ -325,7 +325,7 @@ steps:
   displayName: 'Publish GitHub Release'
   inputs:
     gitHubConnection: release
-    repositoryName: ClayMoreBoy/Hackintosh-Kext-Factory
+    repositoryName: athlonreg/HackintoshKernelExtensionsRepo
     action: edit
     target: '$(Build.SourceVersion)'
     tag: '$(BuildDate)'
