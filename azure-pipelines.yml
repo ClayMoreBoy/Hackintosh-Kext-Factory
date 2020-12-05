@@ -321,7 +321,7 @@ steps:
       zip -qry -FS $(date +%Y-%m-%d).zip release
       cp *.zip $(Build.ArtifactStagingDirectory)
 
-- task: GitHubRelease@0
+- task: GitHubRelease@1
   displayName: 'Publish GitHub Release'
   inputs:
     gitHubConnection: github.com_ClayMoreBoy
