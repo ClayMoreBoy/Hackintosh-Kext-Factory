@@ -318,7 +318,7 @@ steps:
     targetType: 'inline'
     script: |
       #!/bin/bash
-      zip -qry -FS $(date +%Y-%m-%d).zip release
+      zip -qry -FS $(USER)-Hackintosh-Kext-$(date +%Y-%m-%d).zip release
       cp *.zip $(Build.ArtifactStagingDirectory)
 
 - task: GitHubRelease@0
