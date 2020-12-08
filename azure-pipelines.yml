@@ -6,7 +6,7 @@ schedules:
   displayName: Schedule Build
   branches:
     include:
-    - main
+    - master
   always: true
 
 pool:
