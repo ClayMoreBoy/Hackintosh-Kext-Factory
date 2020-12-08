@@ -10,15 +10,6 @@ schedules:
     - master
   always: true
 
-variables:
-  BuildCheck: 'False'
-  FORCE_INSTALL: 1
-  BUILD_UTILITIES: 1
-  DEBUG: 0
-
-pool:
-  vmImage: 'macOS-latest'
-
 steps:
 - task: Bash@3
   displayName: 'Lilu Basic Dependency'
@@ -122,24 +113,31 @@ steps:
       )
       for plugin in ${otherMaintainLiluPlugins[*]}; do
         echo "===================> Building ${plugin%,*} "
+        which wget || brew install wget
+        addr=$(echo ${plugin##*,} | awk -F '/' '{print $4"/"$5}' | sed 's/.git//g')
         mkdir -p release/${plugin%,*}
-        git clone -q ${plugin##*,} ${plugin%,*} -b master --depth=1
-        cd ${plugin%,*}
-        if [[ "${plugin%,*}" != "ATH9KFixup" ]] ; then
-          wget -q https://github.com/acidanthera/Lilu/releases/download/1.4.7/Lilu-1.4.7-DEBUG.zip
-          unzip -q Lilu-1.4.7-DEBUG.zip && rm -rf Lilu-1.4.7-DEBUG.zip
-        fi
-        xcodebuild -configuration Debug > /dev/null 2>&1
-        xcodebuild -configuration Release > /dev/null 2>&1
-        if [ -e build/Release/*.zip ]; then
-          cp -f build/*/*.zip ../release/${plugin%,*}
-        else
-          mkdir -p ../release/${plugin%,*}/Debug
-          mkdir -p ../release/${plugin%,*}/Release
-          cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
-          cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
-        fi
-        cd ../
+        # git clone -q ${plugin##*,} ${plugin%,*} -b master --depth=1
+        # cd ${plugin%,*}
+        # if [[ "${plugin%,*}" != "ATH9KFixup" ]] ; then
+        #   wget -q https://github.com/acidanthera/Lilu/releases/download/1.4.7/Lilu-1.4.7-DEBUG.zip
+        #   unzip -q Lilu-1.4.7-DEBUG.zip && rm -rf Lilu-1.4.7-DEBUG.zip
+        # fi
+        # xcodebuild -configuration Debug > /dev/null 2>&1
+        # xcodebuild -configuration Release > /dev/null 2>&1
+        # if [ -e build/Release/*.zip ]; then
+        #   cp -f build/*/*.zip ../release/${plugin%,*}
+        # else
+        #   mkdir -p ../release/${plugin%,*}/Debug
+        #   mkdir -p ../release/${plugin%,*}/Release
+        #   cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
+        #   cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
+        # fi
+        cd release/${plugin%,*}
+        for i in $(curl https://api.github.com/repos/${addr}/releases/latest | grep browser_download_url | awk -F '"' '{print $4}')
+        do
+          wget $i
+        done
+        cd ../..
       done
 
 - task: Bash@3
