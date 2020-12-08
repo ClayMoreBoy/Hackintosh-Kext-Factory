@@ -1,4 +1,3 @@
-# Starter pipeline
 trigger: none
 pr: none
 
@@ -7,8 +6,11 @@ schedules:
   displayName: Schedule Build
   branches:
     include:
-    - master
+    - main
   always: true
+
+pool:
+  vmImage: 'macOS-latest'
 
 steps:
 - task: Bash@3
