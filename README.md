@@ -18,7 +18,7 @@
 🐌
 🐌
 ## Hackintosh Auto Compile Kext:
-# 黑苹果常用驱动自动编译 [![athlonreg](https://img.shields.io/badge/Fork-athlonreg-blue.svg?style=flat&logo=appveyor)](https://github.com/athlonreg) [![Build Status](https://dev.azure.com/claymor3sky/Hackintosh-Kext-Factory/_apis/build/status/athlonreg.HackintoshKernelExtensionsRepo?branchName=master)](https://dev.azure.com/claymor3sky/Hackintosh-Kext-Factory/_build/latest?definitionId=11&branchName=master)
+# 黑苹果常用驱动自动编译 [![athlonreg](https://img.shields.io/badge/Fork-athlonreg-blue.svg?style=flat&logo=appveyor)](https://github.com/athlonreg) [![Build Status](https://dev.azure.com/claymor3sky/Hackintosh-Kext-Factory/_apis/build/status/claymor3sky.Hackintosh-Kext-Factory?branchName=master)](https://dev.azure.com/claymor3sky/Hackintosh-Kext-Factory/_build/latest?definitionId=3&branchName=master)
 
 ## Release 自行下载
 [![Hackintosh-Kext-Factory GitHub all releases](https://img.shields.io/github/v/release/ClayMoreBoy/Hackintosh-Kext-Factory?style=for-the-badge&label=Download)](https://github.com/ClayMoreBoy/Hackintosh-Kext-Factory/releases/latest)
