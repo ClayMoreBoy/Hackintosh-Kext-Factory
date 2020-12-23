@@ -24,7 +24,7 @@
 [![Hackintosh-Kext-Factory GitHub all releases](https://img.shields.io/github/v/release/ClayMoreBoy/Hackintosh-Kext-Factory?style=for-the-badge&label=Download)](https://github.com/ClayMoreBoy/Hackintosh-Kext-Factory/releases/latest)
 
 ## 构建时间
-每天 22:00 UTC
+每8小时编译
 
 ## 已覆盖的驱动清单
 - Lilu
