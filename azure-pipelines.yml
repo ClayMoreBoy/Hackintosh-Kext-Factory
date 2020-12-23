@@ -332,9 +332,4 @@ steps:
     target: '$(Build.SourceVersion)'
     tag: '$(BuildDate)'
     title: Hackintosh-Kext🚀 | 自动编译 / $(BuildDate)
-    releaseNotes:  |
-      1、本驱动集合包为自动编译
-      2、发行版中只提供常用的黑苹果常用驱动
-      由衷感谢所有为黑苹果无私奉献的大佬们
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
-    addChangeLog: false
