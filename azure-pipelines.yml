@@ -332,4 +332,5 @@ steps:
     target: '$(Build.SourceVersion)'
     tag: '$(BuildDate)'
     title: Hackintosh-Kext🚀 | 自动编译 / $(BuildDate)
+    releaseNotesFile: releaseNotesFile.md
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
