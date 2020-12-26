@@ -1,4 +1,4 @@
-## 已覆盖的驱动清单
+## 已覆盖的驱动清单(最新官方源)
 - Lilu
 - VoodooInput
 - AirportBrcmFixup
