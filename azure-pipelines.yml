@@ -123,8 +123,8 @@ steps:
         git clone -q ${plugin##*,} ${plugin%,*} -b master --depth=1
         cd ${plugin%,*}
         if [[ "${plugin%,*}" != "ATH9KFixup" ]] ; then
-          wget -q https://github.com/acidanthera/Lilu/releases/download/1.4.7/Lilu-1.4.7-DEBUG.zip
-          unzip -q Lilu-1.4.7-DEBUG.zip && rm -rf Lilu-1.6.7-DEBUG.zip
+          wget -q https://github.com/acidanthera/Lilu/releases/download/1.3.7/Lilu-1.3.7-DEBUG.zip
+          unzip -q Lilu-1.3.7-DEBUG.zip && rm -rf Lilu-1.3.7-DEBUG.zip
         fi
         xcodebuild -configuration Debug > /dev/null 2>&1
         xcodebuild -configuration Release > /dev/null 2>&1
